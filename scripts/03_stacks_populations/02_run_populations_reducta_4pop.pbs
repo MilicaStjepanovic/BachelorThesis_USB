@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -N populations_reducta4
+#PBS -l select=1:ncpus=8:mem=32gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/reducta_4pop/09_logs/populations_reducta_4pop.pbs.log
+
+set -euo pipefail
+
+module load stacks
+
+BASE=/storage/plzen1/home/m_stjepanovic/reducta_clean/reducta_4pop
+GSTACKS=$BASE/03_gstacks
+POPMAP=$BASE/02_metadata/popmap_reducta_new.txt
+OUT=$BASE/04_populations
+
+mkdir -p "$OUT"
+
+echo "Running populations for Reducta-only 4-population dataset"
+date
+
+populations \
+  -P "$GSTACKS" \
+  -M "$POPMAP" \
+  --vcf \
+  --plink \
+  -O "$OUT" \
+  -t 8
+
+echo "populations finished"
+date

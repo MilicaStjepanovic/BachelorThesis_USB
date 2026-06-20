@@ -1,0 +1,29 @@
+#!/bin/bash
+#PBS -N gstacks_katia
+#PBS -l select=1:ncpus=8:mem=32gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup/08_logs/gstacks_katia.pbs.log
+
+set -euo pipefail
+
+module load stacks
+
+BASE=/storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup
+BAMDIR=$BASE/03_bams_all
+POPMAP=$BASE/04_metadata/popmap_reducta_camilla_katia.txt
+OUT=$BASE/05_gstacks
+
+mkdir -p "$OUT"
+
+echo "Running gstacks for Reducta + Camilla + Katia outgroups"
+date
+
+gstacks \
+  -I "$BAMDIR" \
+  -M "$POPMAP" \
+  -O "$OUT" \
+  -t 8
+
+echo "gstacks finished"
+date

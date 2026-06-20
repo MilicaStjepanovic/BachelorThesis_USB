@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -N populations_katia
+#PBS -l select=1:ncpus=8:mem=32gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup/08_logs/populations_katia.pbs.log
+
+set -euo pipefail
+
+module load stacks
+
+BASE=/storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup
+GSTACKS=$BASE/05_gstacks
+POPMAP=$BASE/04_metadata/popmap_reducta_camilla_katia.txt
+OUT=$BASE/06_populations
+
+mkdir -p "$OUT"
+
+echo "Running populations for Reducta + Camilla + Katia outgroups"
+date
+
+populations \
+  -P "$GSTACKS" \
+  -M "$POPMAP" \
+  --vcf \
+  --plink \
+  -O "$OUT" \
+  -t 8
+
+echo "populations finished"
+date
