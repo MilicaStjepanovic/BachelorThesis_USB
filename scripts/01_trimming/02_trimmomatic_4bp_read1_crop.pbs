@@ -1,0 +1,21 @@
+#PBS -N trimmomatic_4bp_loop
+#PBS -l select=1:ncpus=2:mem=30gb
+#PBS -l walltime=08:00:00
+
+module add trimmomatic
+
+INPUT_DIR="/storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut_fixed"
+OUTPUT_DIR="/storage/plzen1/home/m_stjepanovic/trimmomatic_4bpcut"
+
+mkdir -p "$OUTPUT_DIR"
+
+for r1 in "$INPUT_DIR"/*_1.paired.fq.gz; do
+    echo "Cropping $r1"
+
+    sample=$(basename "$r1" _1.paired.fq.gz)
+
+    trimmomatic SE -threads 2 \
+        "$r1" \
+        "$OUTPUT_DIR/${sample}_1.paired_4bpcut.fq.gz" \
+        HEADCROP:4
+done

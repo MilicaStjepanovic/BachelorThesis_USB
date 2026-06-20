@@ -1,0 +1,44 @@
+#!/bin/bash
+#PBS -N trimmomatic_fastqc_reducta
+#PBS -l select=1:ncpus=1:mem=50gb:scratch_local=50gb
+#PBS -l walltime=02:00:00
+#PBS -o /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/logs/trimmomatic_fastqc.log
+#PBS -e /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/logs/trimmomatic_fastqc.err
+
+# Use bash explicitly
+cd /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta || exit 1
+
+# Load modules
+module purge
+module load trimmomatic/0.39
+module load fastqc
+
+# Make sure output folders exist
+mkdir -p /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut
+mkdir -p /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/fastqc_results_trimmed
+
+# List of sample names
+samples=(Red_SP011 Red_SP179 Red_SP220 Red_SP256 Red_SP347 Red_SP455 Red_SP509 Red_SP526 Red_SP604 Red_SP625)
+
+# Loop over each sample
+for s in "${samples[@]}"; do
+    echo "Processing sample: $s"
+
+    # Run Trimmomatic PE
+    trimmomatic PE -threads 1 \
+        /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/${s}_1.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/${s}_2.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_1.paired.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_1.unpaired.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_2.paired.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_2.unpaired.fq.gz \
+        ILLUMINACLIP:/storage/plzen1/home/m_stjepanovic/adapter.fas:2:30:10 MINLEN:80
+
+    # Run FastQC on paired reads
+    fastqc -t 1 \
+        -o /storage/plzen1/home/m_stjepanovic/RADseq_project/Milica_reducta/fastqc_results_trimmed \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_1.paired.fq.gz \
+        /storage/plzen1/home/m_stjepanovic/trimmomatic_adaptercut/${s}_2.paired.fq.gz
+done
+
+echo "TRIMMOMATIC + FASTQC JOB FINISHED SUCCESSFULLY"
