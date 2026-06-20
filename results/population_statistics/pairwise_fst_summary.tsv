@@ -1,0 +1,7 @@
+Population_1	Population_2	Mean_FST	Weighted_FST
+Balkans	East	0.23428	0.35383
+Balkans	Italy	0.21364	0.31587
+Balkans	West	0.28518	0.47184
+East	Italy	0.32678	0.45161
+East	West	0.50979	0.66186
+Italy	West	0.13007	0.19655
