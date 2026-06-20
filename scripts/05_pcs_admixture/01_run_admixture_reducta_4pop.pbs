@@ -1,0 +1,36 @@
+#!/bin/bash
+#PBS -N admixture_reducta4
+#PBS -l select=1:ncpus=8:mem=16gb
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/reducta_4pop/09_logs/admixture_reducta_4pop.pbs.log
+
+set -euo pipefail
+
+module load admixture
+
+BASE=/storage/plzen1/home/m_stjepanovic/reducta_clean/reducta_4pop
+PLINK=$BASE/06_plink_admixture/reducta_4pop_admix
+OUT=$BASE/08_admixture
+
+mkdir -p "$OUT"
+cd "$OUT"
+
+echo "Running ADMIXTURE K=2 to K=10"
+date
+
+for K in {2..10}
+do
+  echo "Running K=$K"
+  date
+
+  admixture --cv=10 -j8 "$PLINK.bed" "$K" | tee "reducta_4pop_K${K}.log"
+
+  mv reducta_4pop_admix.${K}.Q reducta_4pop.K${K}.Q
+  mv reducta_4pop_admix.${K}.P reducta_4pop.K${K}.P
+done
+
+echo "ADMIXTURE finished"
+date
+
+grep -h "CV error" reducta_4pop_K*.log > reducta_4pop_CV_errors.txt
