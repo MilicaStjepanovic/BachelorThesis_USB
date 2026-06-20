@@ -1,0 +1,47 @@
+#!/bin/bash
+#PBS -N map_katia_bwamem2
+#PBS -l select=1:ncpus=8:mem=24gb
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup/08_logs/map_katia_bwamem2.pbs.log
+
+set -euo pipefail
+
+module load bwa-mem2
+module load samtools
+
+BASE=/storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup
+READS=$BASE/00_downloads
+OUT=$BASE/02_mapped_outgroups
+SAMPLES=$BASE/04_metadata/katia_samples.txt
+REF=/storage/plzen1/home/m_stjepanovic/reference_genome/GCA_964271765.1_ilLimRedu1.hap1.1_genomic.fna
+
+mkdir -p "$OUT"
+
+echo "Starting Katia outgroup mapping"
+date
+echo "Reference: $REF"
+echo "Reads: $READS"
+echo "Output: $OUT"
+
+while read s
+do
+  echo "Mapping $s"
+  date
+
+  bwa-mem2 mem -t 8 "$REF" \
+    "$READS/${s}.1.fq.gz" \
+    "$READS/${s}.2.fq.gz" \
+    | samtools view -bS - \
+    | samtools sort -@ 8 -o "$OUT/${s}.bam"
+
+  samtools index "$OUT/${s}.bam"
+
+  samtools flagstat "$OUT/${s}.bam" > "$OUT/${s}.flagstat.txt"
+
+  echo "Finished $s"
+  date
+done < "$SAMPLES"
+
+echo "All Katia outgroups mapped"
+date
