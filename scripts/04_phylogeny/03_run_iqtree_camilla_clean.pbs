@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N iqtree_reducta_camilla
+#PBS -l select=1:ncpus=8:mem=16gb
+#PBS -l walltime=08:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/09_logs/iqtree_camilla_clean.pbs.log
+
+set -euo pipefail
+
+cd /storage/plzen1/home/m_stjepanovic/reducta_clean/08_tree
+
+/storage/plzen1/home/m_stjepanovic/new_project/iqtree-2.0.7-Linux/bin/iqtree2 \
+  -s /storage/plzen1/home/m_stjepanovic/reducta_clean/08_tree/alignment_nomaf_missing07.fasta \
+  -st DNA \
+  -m TVMe+R3 \
+  -bb 1000 \
+  -alrt 1000 \
+  -nt 8 \
+  -pre /storage/plzen1/home/m_stjepanovic/reducta_clean/08_tree/reducta_camilla_nomaf_missing07_TVMeR3

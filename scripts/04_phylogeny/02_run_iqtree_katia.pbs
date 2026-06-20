@@ -1,0 +1,22 @@
+#!/bin/bash
+#PBS -N iqtree_katia
+#PBS -l select=1:ncpus=8:mem=24gb
+#PBS -l walltime=12:00:00
+#PBS -j oe
+#PBS -o /storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup/08_logs/iqtree_katia.pbs.log
+
+set -euo pipefail
+
+TREE=/storage/plzen1/home/m_stjepanovic/reducta_clean/katia_outgroup/07_tree
+IQTREE=/storage/plzen1/home/m_stjepanovic/new_project/iqtree-2.0.7-Linux/bin/iqtree2
+
+cd "$TREE"
+
+"$IQTREE" \
+  -s "$TREE/alignment_nomaf_missing07.fasta" \
+  -st DNA \
+  -m MFP \
+  -bb 1000 \
+  -alrt 1000 \
+  -nt 8 \
+  -pre "$TREE/reducta_camilla_katia_nomaf_missing07_MFP"
