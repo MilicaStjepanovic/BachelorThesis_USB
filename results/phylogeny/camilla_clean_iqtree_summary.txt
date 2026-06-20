@@ -1,0 +1,54 @@
+IQ-TREE clean Camilla run result
+
+Dataset:
+97 Limenitis reducta samples
+6 Limenitis camilla samples
+103 total samples
+
+Input BAM folder:
+~/reducta_clean/03_bams_clean
+
+Popmap:
+~/reducta_clean/04_metadata/popmap_reducta_camilla_clean.txt
+
+Stacks outputs:
+gstacks:
+~/reducta_clean/05_gstacks
+
+populations:
+~/reducta_clean/06_populations
+
+VCF filtering:
+Input VCF:
+~/reducta_clean/06_populations/populations.snps.vcf
+
+Filtered VCF:
+~/reducta_clean/08_tree/tree_nomaf_missing07.recode.vcf
+
+Filter used:
+--max-missing 0.7
+No MAF filter was used.
+
+FASTA alignment:
+~/reducta_clean/08_tree/alignment_nomaf_missing07.fasta
+
+Alignment:
+103 sequences
+351,162 SNP columns
+
+IQ-TREE:
+Model: TVMe+R3
+Support:
+-bb 1000
+-alrt 1000
+
+Final tree files:
+~/reducta_clean/08_tree/FINAL_camilla_clean_ML_tree.treefile
+~/reducta_clean/08_tree/FINAL_camilla_clean_consensus_support_tree.contree
+
+Main result:
+The six Camilla samples form a monophyletic clade in the clean run:
+AB84_01, AB85_10, DS2-3, DS7-1, DS7-10, DS7-5
+
+Interpretation:
+The previous issue where Camilla appeared scattered among Reducta was most likely caused by sample duplication, naming inconsistency, or sample-order problems in the old working folder.

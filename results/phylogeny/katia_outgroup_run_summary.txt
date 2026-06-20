@@ -1,0 +1,46 @@
+Katia outgroup IQ-TREE run summary
+
+Dataset:
+98 Limenitis reducta samples
+6 Limenitis camilla samples
+6 additional outgroup samples from Katia_outgroups
+110 total samples
+
+Additional outgroups:
+AB133-13_Lim3_hel       hel
+AB142-07_Lim3_pop       pop
+AB142-11_Lim3_pop       pop
+AB137-16_Riv_riv        riv
+AB89-09_Riv_riv         riv
+AB138-30_Sap_sappho     sappho
+
+Popmap:
+Reducta grouped as West, Italy, Balkans, East using Alena's new popmap.
+Camilla labelled as cam.
+Katia outgroups labelled as hel, pop, riv, sappho.
+
+Main input folder:
+~/reducta_clean/katia_outgroup/03_bams_all
+
+Pipeline:
+1. Mapped six Katia outgroups to L. reducta reference genome using bwa-mem2.
+2. Combined 98 Reducta BAMs, 6 Camilla BAMs, and 6 Katia outgroup BAMs.
+3. Checked that BAM basenames matched popmap sample names.
+4. Ran gstacks on 110 BAMs.
+5. Ran populations.
+6. Filtered VCF with --max-missing 0.7 and no MAF filter.
+7. Converted VCF to FASTA.
+8. Ran IQ-TREE with -m MFP -bb 1000 -alrt 1000 on MetaCentrum PBS.
+9. Visualised and rooted tree in FigTree on the Neptis outgroup clade.
+
+Filtered alignment:
+110 sequences
+391,711 SNP columns
+
+Final tree files:
+~/reducta_clean/katia_outgroup/07_tree/FINAL_reducta_camilla_katia_ML_tree.treefile
+~/reducta_clean/katia_outgroup/07_tree/FINAL_reducta_camilla_katia_consensus_support_tree.contree
+~/reducta_clean/katia_outgroup/07_tree/FINAL_reducta_camilla_katia_IQTREE_report.iqtree
+
+Interpretation:
+The tree places Neptis rivularis and Neptis sappho as the most distant outgroups. The non-reducta Limenitis outgroups are closer to L. reducta. Camilla forms a clade, and populi/helmanni are placed outside or near the Camilla/reducta relationship depending on branch placement.
