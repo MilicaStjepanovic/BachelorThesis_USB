@@ -1,0 +1,22 @@
+#!/bin/bash
+# Demultiplex ddRAD sequencing pools using Stacks process_radtags
+
+module add stacks
+
+POOL_NUMBERS=("011" "179" "220" "256" "347" "455" "509" "526" "604" "625")
+
+for POOL_NUMBER in "${POOL_NUMBERS[@]}"
+do
+    echo "Processing pool Red_SP${POOL_NUMBER}"
+
+    process_radtags \
+        -i gzfastq \
+        -1 "Red_SP${POOL_NUMBER}_1.paired_4bpcut.fq.gz" \
+        -2 "Red_SP${POOL_NUMBER}_2.paired.fq.gz" \
+        -b "barcodes_SP${POOL_NUMBER}.txt" \
+        -o "output/SP${POOL_NUMBER}" \
+        --renz-1 ecoRI \
+        --renz-2 mseI \
+        --threads 3 \
+        -c -q -r
+done
